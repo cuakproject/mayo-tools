@@ -29,6 +29,10 @@
       }
     },
     {
+      "src": "/foto/(.*)",
+      "dest": "/foto/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
