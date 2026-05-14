@@ -595,29 +595,41 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
     if (img) {
         img.onerror = null; img.onload = null;
         
-        if (avatarUrl && userId) {
-            // Pake proxy backend
-            img.src = `${ROBLOX_PROXY_URL}/avatar/${userId}`;
-            img.style.display = 'block';
-            
-            img.onerror = function() {
-                // Fallback: coba direct CDN
+        // Pake proxy backend
+        img.src = `${ROBLOX_PROXY_URL}/avatar/${userId || '0'}`;
+        img.style.display = 'block';
+        
+        img.onerror = function() {
+            // Jika proxy gagal, coba direct
+            if (avatarUrl) {
                 img.onerror = function() {
-                    // Fallback terakhir: icon default
-                    console.log('❌ All avatar failed, showing default');
+                    // Fallback: default icon
                     img.style.display = 'none';
                     document.getElementById('inv4AvatarFound').style.display = 'none';
                     document.getElementById('inv4AvatarEmpty').style.display = 'flex';
                 };
                 img.src = avatarUrl;
-            };
-        } else {
-            // No avatar URL, show default icon
-            img.style.display = 'none';
-            document.getElementById('inv4AvatarFound').style.display = 'none';
-            document.getElementById('inv4AvatarEmpty').style.display = 'flex';
-        }
+            } else {
+                // No avatar at all
+                img.style.display = 'none';
+                document.getElementById('inv4AvatarFound').style.display = 'none';
+                document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+            }
+        };
     }
+
+    // Premium badge
+    const prem = document.getElementById('inv4AvatarPrem');
+    if (prem) {
+        prem.src = 'foto/prem.png';
+        prem.style.display = isPremium ? 'block' : 'none';
+        console.log('👑 Premium badge:', isPremium ? 'SHOWN' : 'HIDDEN');
+    }
+
+    const card = document.getElementById('inv4CardUser');
+    if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
+    inv4SetStatus('inv4StatusUser', 'ok', '✓');
+}
 
     // PREMIUM BADGE - Simple check
     const prem = document.getElementById('inv4AvatarPrem');
