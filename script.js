@@ -940,30 +940,39 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium) {
         if (el) el.style.display = 'flex';
     });
 
-    // SET AVATAR IMAGE
+    // SET AVATAR IMAGE - Pake proxy backend biar ga CORS
     const img = document.getElementById('inv4AvatarImg');
     if (img) {
         if (avatarUrl) {
-            // Force reload
-            img.src = '';
-            setTimeout(() => {
-                img.src = avatarUrl;
-                img.style.display = 'block';
-            }, 50);
+            // Pake proxy backend buat avatar, bukan langsung ke rbxcdn
+            const userId = avatarUrl.match(/AvatarHeadshot-(.+?)-Png/)?.[1] || '';
+            const proxyAvatarUrl = userId
+                ? `${ROBLOX_PROXY_URL}/avatar/${userId}`
+                : avatarUrl;
+
+            console.log('🖼️ Proxy avatar URL:', proxyAvatarUrl);
+
+            img.src = proxyAvatarUrl;
+            img.style.display = 'block';
+            img.crossOrigin = 'anonymous';
 
             img.onerror = function () {
-                console.log('❌ Avatar failed to load, using default');
-                img.src = '';
-                img.style.display = 'none';
-                document.getElementById('inv4AvatarFound').style.display = 'none';
-                document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+                console.log('❌ Avatar failed to load, trying direct URL');
+                // Fallback ke direct URL
+                img.src = avatarUrl;
+                img.onerror = function () {
+                    console.log('❌ Direct avatar also failed');
+                    img.src = '';
+                    img.style.display = 'none';
+                    document.getElementById('inv4AvatarFound').style.display = 'none';
+                    document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+                };
             };
 
             img.onload = function () {
                 console.log('✅ Avatar loaded successfully');
             };
         } else {
-            // No avatar URL, show default
             console.log('⚠️ No avatar URL provided');
             img.src = '';
             img.style.display = 'none';
@@ -975,7 +984,7 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium) {
     // TAMPILIN PREMIUM BADGE
     const prem = document.getElementById('inv4AvatarPrem');
     if (prem) {
-        prem.src = 'foto/prem.png'; // Pastiin path bener
+        prem.src = 'foto/prem.png';
         if (isPremium === true) {
             prem.style.display = 'block';
             console.log('👑 Premium badge SHOWN');
@@ -983,8 +992,6 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium) {
             prem.style.display = 'none';
             console.log('👤 Premium badge HIDDEN (isPremium=' + isPremium + ')');
         }
-    } else {
-        console.log('❌ inv4AvatarPrem element NOT FOUND');
     }
 
     // Update card
