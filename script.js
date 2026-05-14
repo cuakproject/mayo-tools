@@ -600,17 +600,14 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
         img.style.display = 'block';
         
         img.onerror = function() {
-            // Jika proxy gagal, coba direct
             if (avatarUrl) {
                 img.onerror = function() {
-                    // Fallback: default icon
                     img.style.display = 'none';
                     document.getElementById('inv4AvatarFound').style.display = 'none';
                     document.getElementById('inv4AvatarEmpty').style.display = 'flex';
                 };
                 img.src = avatarUrl;
             } else {
-                // No avatar at all
                 img.style.display = 'none';
                 document.getElementById('inv4AvatarFound').style.display = 'none';
                 document.getElementById('inv4AvatarEmpty').style.display = 'flex';
@@ -630,20 +627,6 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
     if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
     inv4SetStatus('inv4StatusUser', 'ok', '✓');
 }
-
-    // PREMIUM BADGE - Simple check
-    const prem = document.getElementById('inv4AvatarPrem');
-    if (prem) {
-        prem.src = 'foto/prem.png';
-        prem.style.display = isPremium === true ? 'block' : 'none';
-        console.log('👑 Premium badge:', isPremium === true ? 'SHOWN ✅' : 'HIDDEN ❌');
-    }
-
-    const card = document.getElementById('inv4CardUser');
-    if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
-    inv4SetStatus('inv4StatusUser', 'ok', '✓');
-}
-
 function inv4ShowAvatarLoading(msg) {
     console.log('⏳ Loading:', msg);
     ['inv4AvatarEmpty','inv4AvatarFound','inv4AvatarErr','inv4UserCheck','inv4UserX'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
