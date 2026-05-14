@@ -957,33 +957,37 @@ function inv4ShowAvatarErr(msg) {
 
 // ==================== INV4: USERNAME LOOKUP (FAST WITH BACKEND) ====================
 function inv4TriggerLookup(username) {
+    // Cancel previous lookup
     if (inv4State.lookupAbort) {
         inv4State.lookupAbort();
         inv4State.lookupAbort = null;
     }
     clearTimeout(inv4State.lookupTimer);
-
+   
     if (!username || username.trim().length < 3) {
         inv4ResetAvatar();
         return;
     }
-
+   
     const clean = username.trim().replace(/\s+/g, '');
-
+    
     // Check cache dulu
     const now = Date.now();
     const cached = inv4LookupCache[clean];
     if (cached && (now - cached.timestamp < 30000)) {
+        // TAMPILIN AVATAR + PREMIUM BADGE
         inv4ShowAvatarFoundSimple(cached.avatarUrl, cached.isPremium);
         return;
     }
 
+    // Reset dulu sebelum search baru
+    inv4ResetAvatar();
     inv4ShowAvatarLoading('⏳ Mencari...');
-
+   
     let cancelled = false;
     let retryCount = 0;
     const MAX_RETRIES = 2;
-
+   
     inv4State.lookupAbort = () => {
         cancelled = true;
     };
@@ -992,19 +996,18 @@ function inv4TriggerLookup(username) {
         if (cancelled) return;
 
         try {
-            // Pake backend /user-lookup yang super cepet
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 8000);
-
+            
             const res = await fetch(`${ROBLOX_PROXY_URL}/user-lookup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: clean }),
                 signal: controller.signal,
             });
-
+            
             clearTimeout(timeout);
-
+            
             if (cancelled) return;
 
             // Handle rate limit / server error dengan retry
@@ -1018,9 +1021,9 @@ function inv4TriggerLookup(username) {
             }
 
             const data = await res.json();
-
+            
             if (cancelled) return;
-
+           
             if (!data.success || !data.found) {
                 inv4ShowAvatarErr('"' + clean + '" tidak ditemukan');
                 return;
@@ -1032,13 +1035,13 @@ function inv4TriggerLookup(username) {
                 isPremium: data.isPremium,
                 timestamp: now
             };
-
-            // Tampilin simpel: cuma avatar + premium badge
+            
+            // TAMPILIN AVATAR + PREMIUM BADGE
             inv4ShowAvatarFoundSimple(data.avatarUrl, data.isPremium);
-
+            
         } catch (e) {
             if (cancelled) return;
-
+            
             if (retryCount < MAX_RETRIES) {
                 retryCount++;
                 const delay = 1500 * retryCount;
@@ -1047,12 +1050,12 @@ function inv4TriggerLookup(username) {
                 await new Promise(r => setTimeout(r, delay));
                 if (!cancelled) return attemptLookup();
             }
-
+            
             console.error('Lookup error:', e);
             inv4ShowAvatarErr('Gagal koneksi');
         }
     };
-
+   
     inv4State.lookupTimer = setTimeout(() => attemptLookup(), 200);
 }
 
