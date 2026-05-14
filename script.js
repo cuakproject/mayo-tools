@@ -872,17 +872,38 @@ function inv4Copy() {
 
 // ==================== INV4: AVATAR STATES ====================
 function inv4ResetAvatar() {
+    console.log('🔄 Resetting avatar...');
+    
+    // Reset semua state avatar
     ['inv4AvatarLoading', 'inv4AvatarFound', 'inv4AvatarErr', 'inv4UserCheck', 'inv4UserX'].forEach(id => {
-        const el = document.getElementById(id); if (el) el.style.display = 'none';
+        const el = document.getElementById(id); 
+        if (el) el.style.display = 'none';
     });
+    
+    // Tampilin empty state
     const empty = document.getElementById('inv4AvatarEmpty');
     if (empty) empty.style.display = 'flex';
+    
+    // Reset avatar image
+    const img = document.getElementById('inv4AvatarImg');
+    if (img) img.src = '';
+    
+    // SEMBUNYIIN PREMIUM BADGE
+    const prem = document.getElementById('inv4AvatarPrem');
+    if (prem) prem.style.display = 'none';
+    
+    // Reset wrap state
     const wrap = document.getElementById('inv4UsernameWrap');
     if (wrap) wrap.classList.remove('state-found', 'state-err');
+    
+    // Reset status
     inv4SetStatus('inv4StatusUser', '', '');
+    
+    // Reset card state
     const card = document.getElementById('inv4CardUser');
     if (card) {
         card.classList.remove('state-ok', 'state-err');
+        // Hapus detail panel kalo ada
         const detailPanel = card.querySelector('.inv4-user-detail');
         if (detailPanel) detailPanel.remove();
     }
@@ -905,37 +926,66 @@ function inv4ShowAvatarLoading(msg) {
 
 // SIMPLE VERSION - Only avatar + premium badge, NO detail panel
 function inv4ShowAvatarFoundSimple(avatarUrl, isPremium) {
+    console.log('🖼️ Showing avatar:', avatarUrl, 'Premium:', isPremium);
+    
+    // Sembunyikan semua state
     ['inv4AvatarEmpty', 'inv4AvatarLoading', 'inv4AvatarErr', 'inv4UserX'].forEach(id => {
-        const el = document.getElementById(id);
+        const el = document.getElementById(id); 
         if (el) el.style.display = 'none';
     });
+    
+    // Tampilin avatar found + check icon
     ['inv4AvatarFound', 'inv4UserCheck'].forEach(id => {
-        const el = document.getElementById(id);
+        const el = document.getElementById(id); 
         if (el) el.style.display = 'flex';
     });
 
+    // SET AVATAR IMAGE - Force refresh dengan timestamp
     const img = document.getElementById('inv4AvatarImg');
     if (img && avatarUrl) {
-        img.src = avatarUrl;
+        // Tambahin timestamp biar ga pake cache browser
+        img.src = avatarUrl + '?t=' + Date.now();
+        img.onerror = function() {
+            // Fallback kalo avatar gagal load
+            img.src = '';
+            document.getElementById('inv4AvatarFound').style.display = 'none';
+            document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+        };
+        img.onload = function() {
+            console.log('✅ Avatar loaded successfully');
+        };
+    } else if (img) {
+        // No avatar, show default
+        img.src = '';
+        document.getElementById('inv4AvatarFound').style.display = 'none';
+        document.getElementById('inv4AvatarEmpty').style.display = 'flex';
     }
 
+    // TAMPILIN / SEMBUNYIIN PREMIUM BADGE
     const prem = document.getElementById('inv4AvatarPrem');
     if (prem) {
-        prem.style.display = isPremium ? 'block' : 'none';
+        if (isPremium) {
+            prem.style.display = 'block';
+            console.log('👑 Premium badge SHOWN');
+        } else {
+            prem.style.display = 'none';
+            console.log('👤 Premium badge HIDDEN');
+        }
     }
 
+    // Update status card
     const card = document.getElementById('inv4CardUser');
-    if (card) {
-        card.classList.add('state-ok');
+    if (card) { 
+        card.classList.add('state-ok'); 
         card.classList.remove('state-err');
-        // Remove detail panel if exists (keep it simple)
+        
+        // HAPUS detail panel kalo ada (biar simpel)
         const detailPanel = card.querySelector('.inv4-user-detail');
         if (detailPanel) detailPanel.remove();
     }
 
     inv4SetStatus('inv4StatusUser', 'ok', '✓');
 }
-
 function inv4ShowAvatarErr(msg) {
     ['inv4AvatarEmpty', 'inv4AvatarLoading', 'inv4AvatarFound', 'inv4UserCheck'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
