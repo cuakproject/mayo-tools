@@ -940,59 +940,65 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium) {
         if (el) el.style.display = 'flex';
     });
 
-    // SET AVATAR IMAGE - Force refresh dengan timestamp
+    // SET AVATAR IMAGE
     const img = document.getElementById('inv4AvatarImg');
-    if (img && avatarUrl) {
-        // Force reload gambar dengan cara hapus dulu
-        img.src = '';
-        img.style.display = 'none';
-
-        // Tunggu bentar baru set src baru
-        setTimeout(() => {
-            img.src = avatarUrl + '?t=' + Date.now();
-            img.style.display = 'block';
-        }, 50);
-        img.onerror = function () {
-            // Fallback kalo avatar gagal load
+    if (img) {
+        if (avatarUrl) {
+            // Force reload
             img.src = '';
+            setTimeout(() => {
+                img.src = avatarUrl;
+                img.style.display = 'block';
+            }, 50);
+
+            img.onerror = function () {
+                console.log('❌ Avatar failed to load, using default');
+                img.src = '';
+                img.style.display = 'none';
+                document.getElementById('inv4AvatarFound').style.display = 'none';
+                document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+            };
+
+            img.onload = function () {
+                console.log('✅ Avatar loaded successfully');
+            };
+        } else {
+            // No avatar URL, show default
+            console.log('⚠️ No avatar URL provided');
+            img.src = '';
+            img.style.display = 'none';
             document.getElementById('inv4AvatarFound').style.display = 'none';
             document.getElementById('inv4AvatarEmpty').style.display = 'flex';
-        };
-        img.onload = function () {
-            console.log('✅ Avatar loaded successfully');
-        };
-    } else if (img) {
-        // No avatar, show default
-        img.src = '';
-        document.getElementById('inv4AvatarFound').style.display = 'none';
-        document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+        }
     }
 
-    // TAMPILIN / SEMBUNYIIN PREMIUM BADGE
+    // TAMPILIN PREMIUM BADGE
     const prem = document.getElementById('inv4AvatarPrem');
     if (prem) {
-        if (isPremium) {
+        prem.src = 'foto/prem.png'; // Pastiin path bener
+        if (isPremium === true) {
             prem.style.display = 'block';
             console.log('👑 Premium badge SHOWN');
         } else {
             prem.style.display = 'none';
-            console.log('👤 Premium badge HIDDEN');
+            console.log('👤 Premium badge HIDDEN (isPremium=' + isPremium + ')');
         }
+    } else {
+        console.log('❌ inv4AvatarPrem element NOT FOUND');
     }
 
-    // Update status card
+    // Update card
     const card = document.getElementById('inv4CardUser');
     if (card) {
         card.classList.add('state-ok');
         card.classList.remove('state-err');
-
-        // HAPUS detail panel kalo ada (biar simpel)
         const detailPanel = card.querySelector('.inv4-user-detail');
         if (detailPanel) detailPanel.remove();
     }
 
     inv4SetStatus('inv4StatusUser', 'ok', '✓');
 }
+
 function inv4ShowAvatarErr(msg) {
     ['inv4AvatarEmpty', 'inv4AvatarLoading', 'inv4AvatarFound', 'inv4UserCheck'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
