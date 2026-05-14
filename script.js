@@ -873,32 +873,32 @@ function inv4Copy() {
 // ==================== INV4: AVATAR STATES ====================
 function inv4ResetAvatar() {
     console.log('🔄 Resetting avatar...');
-    
+
     // Reset semua state avatar
     ['inv4AvatarLoading', 'inv4AvatarFound', 'inv4AvatarErr', 'inv4UserCheck', 'inv4UserX'].forEach(id => {
-        const el = document.getElementById(id); 
+        const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
-    
+
     // Tampilin empty state
     const empty = document.getElementById('inv4AvatarEmpty');
     if (empty) empty.style.display = 'flex';
-    
+
     // Reset avatar image
     const img = document.getElementById('inv4AvatarImg');
     if (img) img.src = '';
-    
+
     // SEMBUNYIIN PREMIUM BADGE
     const prem = document.getElementById('inv4AvatarPrem');
     if (prem) prem.style.display = 'none';
-    
+
     // Reset wrap state
     const wrap = document.getElementById('inv4UsernameWrap');
     if (wrap) wrap.classList.remove('state-found', 'state-err');
-    
+
     // Reset status
     inv4SetStatus('inv4StatusUser', '', '');
-    
+
     // Reset card state
     const card = document.getElementById('inv4CardUser');
     if (card) {
@@ -927,31 +927,38 @@ function inv4ShowAvatarLoading(msg) {
 // SIMPLE VERSION - Only avatar + premium badge, NO detail panel
 function inv4ShowAvatarFoundSimple(avatarUrl, isPremium) {
     console.log('🖼️ Showing avatar:', avatarUrl, 'Premium:', isPremium);
-    
+
     // Sembunyikan semua state
     ['inv4AvatarEmpty', 'inv4AvatarLoading', 'inv4AvatarErr', 'inv4UserX'].forEach(id => {
-        const el = document.getElementById(id); 
+        const el = document.getElementById(id);
         if (el) el.style.display = 'none';
     });
-    
+
     // Tampilin avatar found + check icon
     ['inv4AvatarFound', 'inv4UserCheck'].forEach(id => {
-        const el = document.getElementById(id); 
+        const el = document.getElementById(id);
         if (el) el.style.display = 'flex';
     });
 
     // SET AVATAR IMAGE - Force refresh dengan timestamp
     const img = document.getElementById('inv4AvatarImg');
     if (img && avatarUrl) {
-        // Tambahin timestamp biar ga pake cache browser
-        img.src = avatarUrl + '?t=' + Date.now();
-        img.onerror = function() {
+        // Force reload gambar dengan cara hapus dulu
+        img.src = '';
+        img.style.display = 'none';
+
+        // Tunggu bentar baru set src baru
+        setTimeout(() => {
+            img.src = avatarUrl + '?t=' + Date.now();
+            img.style.display = 'block';
+        }, 50);
+        img.onerror = function () {
             // Fallback kalo avatar gagal load
             img.src = '';
             document.getElementById('inv4AvatarFound').style.display = 'none';
             document.getElementById('inv4AvatarEmpty').style.display = 'flex';
         };
-        img.onload = function() {
+        img.onload = function () {
             console.log('✅ Avatar loaded successfully');
         };
     } else if (img) {
@@ -975,10 +982,10 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium) {
 
     // Update status card
     const card = document.getElementById('inv4CardUser');
-    if (card) { 
-        card.classList.add('state-ok'); 
+    if (card) {
+        card.classList.add('state-ok');
         card.classList.remove('state-err');
-        
+
         // HAPUS detail panel kalo ada (biar simpel)
         const detailPanel = card.querySelector('.inv4-user-detail');
         if (detailPanel) detailPanel.remove();
@@ -1013,31 +1020,25 @@ function inv4TriggerLookup(username) {
         inv4State.lookupAbort = null;
     }
     clearTimeout(inv4State.lookupTimer);
-   
+
     if (!username || username.trim().length < 3) {
         inv4ResetAvatar();
         return;
     }
-   
-    const clean = username.trim().replace(/\s+/g, '');
-    
-    // Check cache dulu
-    const now = Date.now();
-    const cached = inv4LookupCache[clean];
-    if (cached && (now - cached.timestamp < 30000)) {
-        // TAMPILIN AVATAR + PREMIUM BADGE
-        inv4ShowAvatarFoundSimple(cached.avatarUrl, cached.isPremium);
-        return;
-    }
 
-    // Reset dulu sebelum search baru
+    const clean = username.trim().replace(/\s+/g, '');
+
+    // SKIP CACHE - Biar selalu lookup baru
+    inv4LookupCache = {}; // Clear all cache
+
+    // FORCE RESET sebelum search
     inv4ResetAvatar();
     inv4ShowAvatarLoading('⏳ Mencari...');
-   
+
     let cancelled = false;
     let retryCount = 0;
     const MAX_RETRIES = 2;
-   
+
     inv4State.lookupAbort = () => {
         cancelled = true;
     };
@@ -1048,64 +1049,53 @@ function inv4TriggerLookup(username) {
         try {
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 8000);
-            
+
             const res = await fetch(`${ROBLOX_PROXY_URL}/user-lookup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username: clean }),
                 signal: controller.signal,
             });
-            
+
             clearTimeout(timeout);
-            
+
             if (cancelled) return;
 
-            // Handle rate limit / server error dengan retry
             if ((res.status === 429 || res.status >= 500) && retryCount < MAX_RETRIES) {
                 retryCount++;
                 const delay = 1500 * retryCount;
-                console.log(`⚠️ Retry ${retryCount}/${MAX_RETRIES} dalam ${delay}ms`);
                 inv4ShowAvatarLoading(`⏳ Retry ${retryCount}...`);
                 await new Promise(r => setTimeout(r, delay));
                 if (!cancelled) return attemptLookup();
             }
 
             const data = await res.json();
-            
+
             if (cancelled) return;
-           
+
             if (!data.success || !data.found) {
                 inv4ShowAvatarErr('"' + clean + '" tidak ditemukan');
                 return;
             }
 
-            // Cache hasilnya
-            inv4LookupCache[clean] = {
-                avatarUrl: data.avatarUrl,
-                isPremium: data.isPremium,
-                timestamp: now
-            };
-            
             // TAMPILIN AVATAR + PREMIUM BADGE
             inv4ShowAvatarFoundSimple(data.avatarUrl, data.isPremium);
-            
+
         } catch (e) {
             if (cancelled) return;
-            
+
             if (retryCount < MAX_RETRIES) {
                 retryCount++;
                 const delay = 1500 * retryCount;
-                console.log(`⚠️ Error, retry ${retryCount}/${MAX_RETRIES} dalam ${delay}ms`);
                 inv4ShowAvatarLoading(`⏳ Retry ${retryCount}...`);
                 await new Promise(r => setTimeout(r, delay));
                 if (!cancelled) return attemptLookup();
             }
-            
-            console.error('Lookup error:', e);
+
             inv4ShowAvatarErr('Gagal koneksi');
         }
     };
-   
+
     inv4State.lookupTimer = setTimeout(() => attemptLookup(), 200);
 }
 
