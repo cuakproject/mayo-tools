@@ -582,30 +582,53 @@ function inv4TriggerLookup(username) {
 
 // ==================== INV4: AVATAR DISPLAY ====================
 function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
-    console.log('🖼️ Showing avatar. URL:', avatarUrl, 'Premium:', isPremium, 'UserID:', userId);
-    ['inv4AvatarEmpty','inv4AvatarLoading','inv4AvatarErr','inv4UserX'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
-    ['inv4AvatarFound','inv4UserCheck'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'flex'; });
+    console.log('🖼️ Avatar URL:', avatarUrl, 'Premium:', isPremium, 'ID:', userId);
+    
+    ['inv4AvatarEmpty','inv4AvatarLoading','inv4AvatarErr','inv4UserX'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
+    ['inv4AvatarFound','inv4UserCheck'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.style.display = 'flex';
+    });
+
     const img = document.getElementById('inv4AvatarImg');
     if (img) {
-        img.style.display = 'none';
         img.onerror = null; img.onload = null;
+        
         if (avatarUrl && userId) {
-            const proxyUrl = `${ROBLOX_PROXY_URL}/avatar/${userId}`;
-            console.log('🖼️ Loading avatar from proxy:', proxyUrl);
-            img.onload = () => { console.log('✅ Avatar loaded!'); img.style.display = 'block'; };
-            img.onerror = () => {
-                console.log('⚠️ Proxy failed, coba direct');
-                img.onload = () => { console.log('✅ Direct OK'); img.style.display = 'block'; };
-                img.onerror = () => { console.log('❌ All failed'); img.src = ''; img.style.display = 'none'; document.getElementById('inv4AvatarFound').style.display = 'none'; document.getElementById('inv4AvatarEmpty').style.display = 'flex'; };
+            // Pake proxy backend
+            img.src = `${ROBLOX_PROXY_URL}/avatar/${userId}`;
+            img.style.display = 'block';
+            
+            img.onerror = function() {
+                // Fallback: coba direct CDN
+                img.onerror = function() {
+                    // Fallback terakhir: icon default
+                    console.log('❌ All avatar failed, showing default');
+                    img.style.display = 'none';
+                    document.getElementById('inv4AvatarFound').style.display = 'none';
+                    document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+                };
                 img.src = avatarUrl;
             };
-            img.src = proxyUrl;
-        } else { console.log('⚠️ No avatar'); img.src = ''; img.style.display = 'none'; document.getElementById('inv4AvatarFound').style.display = 'none'; document.getElementById('inv4AvatarEmpty').style.display = 'flex'; }
+        } else {
+            // No avatar URL, show default icon
+            img.style.display = 'none';
+            document.getElementById('inv4AvatarFound').style.display = 'none';
+            document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+        }
     }
+
+    // PREMIUM BADGE - Simple check
     const prem = document.getElementById('inv4AvatarPrem');
-    if (prem) { prem.src = 'foto/prem.png'; prem.style.display = isPremium === true ? 'block' : 'none'; console.log(isPremium ? '👑 Premium badge: SHOWN' : '👤 Premium badge: HIDDEN'); }
+    if (prem) {
+        prem.src = 'foto/prem.png';
+        prem.style.display = isPremium === true ? 'block' : 'none';
+        console.log('👑 Premium badge:', isPremium === true ? 'SHOWN ✅' : 'HIDDEN ❌');
+    }
+
     const card = document.getElementById('inv4CardUser');
-    if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); const dp = card.querySelector('.inv4-user-detail'); if (dp) dp.remove(); }
+    if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
     inv4SetStatus('inv4StatusUser', 'ok', '✓');
 }
 
