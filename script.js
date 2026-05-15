@@ -583,95 +583,53 @@ function inv4TriggerLookup(username) {
 function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
     console.log('🖼️ Avatar URL:', avatarUrl, 'Premium:', isPremium, 'ID:', userId);
     
-    // Reset semua state
-    ['inv4AvatarEmpty','inv4AvatarLoading','inv4AvatarErr','inv4UserX','inv4UserCheck'].forEach(id => {
+    ['inv4AvatarEmpty','inv4AvatarLoading','inv4AvatarErr','inv4UserX'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
+    });
+    ['inv4AvatarFound','inv4UserCheck'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.style.display = 'flex';
     });
 
     const img = document.getElementById('inv4AvatarImg');
     if (img) {
         img.onerror = null; img.onload = null;
-        img.style.display = 'none';
-        img.src = '';
-    }
-    
-    // Hide premium badge dulu
-    const prem = document.getElementById('inv4AvatarPrem');
-    if (prem) prem.style.display = 'none';
-
-    // Kalo ga ada avatar URL atau userId → langsung default
-    if (!avatarUrl || !userId) {
-        console.log('⚠️ No avatar, showing default');
-        document.getElementById('inv4AvatarEmpty').style.display = 'flex';
-        if (prem) { prem.src = 'foto/prem.png'; prem.style.display = isPremium ? 'block' : 'none'; }
-        const card = document.getElementById('inv4CardUser');
-        if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
-        inv4SetStatus('inv4StatusUser', 'ok', '✓');
-        return;
-    }
-
-    // Tampilin loading state
-    document.getElementById('inv4AvatarLoading').style.display = 'flex';
-    
-    // Coba load via proxy
-    const proxyUrl = `${ROBLOX_PROXY_URL}/avatar/${userId}`;
-    
-    // Buat image object baru buat ngetes
-    const testImg = new Image();
-    
-    testImg.onload = function() {
-        // BERHASIL! Tampilin avatar
-        console.log('✅ Avatar loaded via proxy');
-        document.getElementById('inv4AvatarLoading').style.display = 'none';
-        document.getElementById('inv4AvatarFound').style.display = 'flex';
-        document.getElementById('inv4UserCheck').style.display = 'flex';
-        
-        img.src = proxyUrl;
         img.style.display = 'block';
         
-        if (prem) { prem.src = 'foto/prem.png'; prem.style.display = isPremium ? 'block' : 'none'; }
-        console.log('👑 Premium badge:', isPremium ? 'SHOWN' : 'HIDDEN');
-    };
-    
-    testImg.onerror = function() {
-        // Proxy gagal, coba direct
-        console.log('⚠️ Proxy failed, trying direct URL:', avatarUrl);
-        
-        const directImg = new Image();
-        
-        directImg.onload = function() {
-            // Direct berhasil
-            console.log('✅ Avatar loaded via direct URL');
-            document.getElementById('inv4AvatarLoading').style.display = 'none';
-            document.getElementById('inv4AvatarFound').style.display = 'flex';
-            document.getElementById('inv4UserCheck').style.display = 'flex';
+        if (avatarUrl && userId) {
+            // Pake proxy backend (CEPET)
+            img.src = `${ROBLOX_PROXY_URL}/avatar/${userId}`;
             
-            img.src = avatarUrl;
-            img.style.display = 'block';
-            
-            if (prem) { prem.src = 'foto/prem.png'; prem.style.display = isPremium ? 'block' : 'none'; }
-            console.log('👑 Premium badge:', isPremium ? 'SHOWN' : 'HIDDEN');
-        };
-        
-        directImg.onerror = function() {
-            // Semua gagal → DEFAULT ICON
-            console.log('❌ All failed, showing default icon');
-            document.getElementById('inv4AvatarLoading').style.display = 'none';
-            document.getElementById('inv4AvatarEmpty').style.display = 'flex';
-            
+            img.onerror = function() {
+                // Proxy gagal, coba direct
+                if (avatarUrl) {
+                    img.onerror = function() {
+                        // Semua gagal → icon default
+                        img.style.display = 'none';
+                        document.getElementById('inv4AvatarFound').style.display = 'none';
+                        document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+                    };
+                    img.src = avatarUrl;
+                } else {
+                    img.style.display = 'none';
+                    document.getElementById('inv4AvatarFound').style.display = 'none';
+                    document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+                }
+            };
+        } else {
+            // Ga ada avatar → icon default langsung
             img.style.display = 'none';
-            img.src = '';
-            
-            if (prem) { prem.src = 'foto/prem.png'; prem.style.display = isPremium ? 'block' : 'none'; }
-            console.log('👑 Premium badge:', isPremium ? 'SHOWN' : 'HIDDEN');
-        };
-        
-        directImg.src = avatarUrl;
-    };
-    
-    testImg.src = proxyUrl;
+            document.getElementById('inv4AvatarFound').style.display = 'none';
+            document.getElementById('inv4AvatarEmpty').style.display = 'flex';
+        }
+    }
 
-    // Update card
+    // Premium badge
+    const prem = document.getElementById('inv4AvatarPrem');
+    if (prem) {
+        prem.src = 'foto/prem.png';
+        prem.style.display = isPremium ? 'block' : 'none';
+    }
+
     const card = document.getElementById('inv4CardUser');
     if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
     inv4SetStatus('inv4StatusUser', 'ok', '✓');
