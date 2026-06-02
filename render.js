@@ -72,7 +72,7 @@ export function renderApp() {
             <button class="quick-btn" data-template="estimation"><i class="fas fa-exclamation"></i><span>Bikin BC GK</span></button>
             <button class="quick-btn" data-template="queue"><i class="fas fa-users"></i><span>Passkey Aktif</span></button>
             <button class="quick-btn" data-template="checklogin"><i class="fas fa-sign-in-alt"></i><span>Cek Login</span></button>
-            <button class="quick-btn" data-template="regencode"><i class="fas fa-sync"></i><span>Reset BC</span></button>
+            <button class="quick-btn" data-template="regencode"><i class="fas fa-sync"></i><span>Invalid BC</span></button>
             <button class="quick-btn" data-template="checkemail"><i class="fas fa-envelope"></i><span>Cek Email</span></button>
             <button class="quick-btn" data-template="gp"><i class="fas fa-cart-plus"></i><span>Via Gamepass</span></button>
             <button class="quick-btn" data-template="webproblem"><i class="fas fa-globe"></i><span>Problem Web</span></button>
