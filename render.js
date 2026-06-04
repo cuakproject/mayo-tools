@@ -70,7 +70,7 @@ export function renderApp() {
             <button class="quick-btn" data-template="backup"><i class="fas fa-key"></i><span>Backup Code</span></button>
             <button class="quick-btn" data-template="reset"><i class="fas fa-redo"></i><span>Reset PW</span></button>
             <button class="quick-btn" data-template="estimation"><i class="fas fa-exclamation"></i><span>Bikin BC GK</span></button>
-            <button class="quick-btn" data-template="queue"><i class="fas fa-users"></i><span>Tes</span></button>
+            <button class="quick-btn" data-template="queue"><i class="fas fa-users"></i><span>Acc Only</span></button>
             <button class="quick-btn" data-template="checklogin"><i class="fas fa-sign-in-alt"></i><span>Cek Login</span></button>
             <button class="quick-btn" data-template="regencode"><i class="fas fa-sync"></i><span>Invalid BC</span></button>
             <button class="quick-btn" data-template="checkemail"><i class="fas fa-envelope"></i><span>Cek Email</span></button>
