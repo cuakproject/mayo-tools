@@ -57,49 +57,49 @@ export function renderApp() {
     </section>
 
     <!-- Quick Actions -->
-<section class="quick-actions-section">
-    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+    <section class="quick-actions-section">
+        <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
 
-    <div class="quick-group">
-        <div class="quick-group-label quick-group-order">Order</div>
-        <div class="quick-actions">
-            <button class="quick-btn" data-template="order"><i class="fas fa-shopping-cart"></i><span>Cara Order</span></button>
-            <button class="quick-btn" data-template="weborder"><i class="fas fa-globe"></i><span>Order ke Web</span></button>
-            <button class="quick-btn" data-template="gp"><i class="fas fa-ticket-alt"></i><span>Via Gamepass</span></button>
-            <button class="quick-btn" data-template="list"><i class="fas fa-list-ol"></i><span>Klik List</span></button>
-            <button class="quick-btn" data-template="thanks"><i class="fas fa-heart"></i><span>Terima Kasih</span></button>
+        <div class="quick-group">
+            <div class="quick-group-label quick-group-order">Order</div>
+            <div class="quick-actions">
+                <button class="quick-btn" data-template="order"><i class="fas fa-shopping-cart"></i><span>Cara Order</span></button>
+                <button class="quick-btn" data-template="weborder"><i class="fas fa-globe"></i><span>Order ke Web</span></button>
+                <button class="quick-btn" data-template="gp"><i class="fas fa-ticket-alt"></i><span>Via Gamepass</span></button>
+                <button class="quick-btn" data-template="list"><i class="fas fa-list-ol"></i><span>Klik List</span></button>
+                <button class="quick-btn" data-template="thanks"><i class="fas fa-heart"></i><span>Terima Kasih</span></button>
+            </div>
         </div>
-    </div>
 
-    <div class="quick-group">
-        <div class="quick-group-label quick-group-problem">Problem</div>
-        <div class="quick-actions">
-            <button class="quick-btn" data-template="wrongpw"><i class="fas fa-lock"></i><span>PW Salah</span></button>
-            <button class="quick-btn" data-template="reset"><i class="fas fa-redo"></i><span>Reset PW</span></button>
-            <button class="quick-btn" data-template="regencode"><i class="fas fa-shield-alt"></i><span>Invalid BC</span></button>
-            <button class="quick-btn" data-template="webproblem"><i class="fas fa-times-circle"></i><span>BC Ngasal</span></button>
-            <button class="quick-btn" data-template="queue"><i class="fas fa-user-question"></i><span>Acc Only</span></button>
-            <button class="quick-btn" data-template="fix"><i class="fas fa-fingerprint"></i><span>Passkey Aktif</span></button>
-            <button class="quick-btn" data-template="qr"><i class="fas fa-shield-virus"></i><span>Hardware Passkey</span></button>
+        <div class="quick-group">
+            <div class="quick-group-label quick-group-problem">Problem</div>
+            <div class="quick-actions">
+                <button class="quick-btn" data-template="wrongpw"><i class="fas fa-lock"></i><span>PW Salah</span></button>
+                <button class="quick-btn" data-template="reset"><i class="fas fa-redo"></i><span>Reset PW</span></button>
+                <button class="quick-btn" data-template="regencode"><i class="fas fa-shield-alt"></i><span>Invalid BC</span></button>
+                <button class="quick-btn" data-template="webproblem"><i class="fas fa-times-circle"></i><span>BC Ngasal</span></button>
+                <button class="quick-btn" data-template="queue"><i class="fas fa-user-slash"></i><span>Acc Only</span></button>
+                <button class="quick-btn" data-template="fix"><i class="fas fa-fingerprint"></i><span>Passkey Aktif</span></button>
+                <button class="quick-btn" data-template="qr"><i class="fas fa-shield-virus"></i><span>Hardware Passkey</span></button>
+            </div>
         </div>
-    </div>
 
-    <div class="quick-group">
-        <div class="quick-group-label quick-group-other">Lainnya</div>
-        <div class="quick-actions">
-            <button class="quick-btn" data-template="backup"><i class="fas fa-key"></i><span>Tutor BC Full</span></button>
-            <button class="quick-btn" data-template="estimation"><i class="fas fa-plus-circle"></i><span>Bikin BC GK</span></button>
-            <button class="quick-btn" data-template="checklogin"><i class="fas fa-sign-in-alt"></i><span>Cek Login</span></button>
-            <button class="quick-btn" data-template="checkemail"><i class="fas fa-envelope"></i><span>Cek Email</span></button>
-            <button class="quick-btn" data-template="error"><i class="fas fa-sign-out-alt"></i><span>Ke Logout</span></button>
-            <button class="quick-btn" data-template="2step"><i class="fas fa-exclamation-triangle"></i><span>2-Step Error</span></button>
-            <button class="quick-btn" data-template="prem"><i class="fas fa-crown"></i><span>Prem Explain</span></button>
-            <button class="quick-btn" data-template="gkmsk"><i class="fas fa-envelope-open-text"></i><span>Kode Gk Msk</span></button>
-            <button class="quick-btn" data-template="gabisa"><i class="fas fa-ban"></i><span>Gabisa</span></button>
-            <button class="quick-btn" data-template="cs"><i class="fas fa-headset"></i><span>Hubungi CS</span></button>
+        <div class="quick-group">
+            <div class="quick-group-label quick-group-other">Lainnya</div>
+            <div class="quick-actions">
+                <button class="quick-btn" data-template="backup"><i class="fas fa-key"></i><span>Tutor BC Full</span></button>
+                <button class="quick-btn" data-template="estimation"><i class="fas fa-plus-circle"></i><span>Bikin BC GK</span></button>
+                <button class="quick-btn" data-template="checklogin"><i class="fas fa-sign-in-alt"></i><span>Cek Login</span></button>
+                <button class="quick-btn" data-template="checkemail"><i class="fas fa-envelope"></i><span>Cek Email</span></button>
+                <button class="quick-btn" data-template="error"><i class="fas fa-sign-out-alt"></i><span>Ke Logout</span></button>
+                <button class="quick-btn" data-template="2step"><i class="fas fa-exclamation-triangle"></i><span>2-Step Error</span></button>
+                <button class="quick-btn" data-template="prem"><i class="fas fa-crown"></i><span>Prem Explain</span></button>
+                <button class="quick-btn" data-template="gkmsk"><i class="fas fa-envelope-open-text"></i><span>Kode Gk Msk</span></button>
+                <button class="quick-btn" data-template="gabisa"><i class="fas fa-ban"></i><span>Gabisa</span></button>
+                <button class="quick-btn" data-template="cs"><i class="fas fa-headset"></i><span>Hubungi CS</span></button>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Tools Section -->
     <section class="tools-section">
@@ -130,10 +130,7 @@ export function renderApp() {
                         </button>
                     </div>
                 </div>
-                
-                <!-- REORDERED: username - password (row 1), jumlah robux - kode backup (row 2) -->
                 <div class="inv4-grid">
-                    <!-- USERNAME CARD - click to copy + icon copy -->
                     <div class="inv4-card inv4-card-user inv4-card-clickable" id="inv4CardUser" data-field="username">
                         <div class="inv4-card-header">
                             <div class="inv4-card-label">👤 Username</div>
@@ -154,8 +151,6 @@ export function renderApp() {
                         </div>
                         <div class="inv4-card-status" id="inv4StatusUser"></div>
                     </div>
-                    
-                    <!-- PASSWORD CARD - click to copy + icon copy -->
                     <div class="inv4-card inv4-card-clickable" id="inv4CardPass" data-field="password">
                         <div class="inv4-card-header">
                             <div class="inv4-card-label">🔑 Password</div>
@@ -166,8 +161,6 @@ export function renderApp() {
                         <input class="inv4-card-input" id="inv4Pass" placeholder="password akun">
                         <div class="inv4-card-status" id="inv4StatusPass"></div>
                     </div>
-                    
-                    <!-- JUMLAH ROBUX CARD - click to copy + icon copy -->
                     <div class="inv4-card inv4-card-clickable" id="inv4CardRobux" data-field="robux">
                         <div class="inv4-card-header">
                             <div class="inv4-card-label">✨ Jumlah Robux</div>
@@ -178,8 +171,6 @@ export function renderApp() {
                         <input class="inv4-card-input" id="inv4Robux" placeholder="1000, 500, 2200prem…">
                         <div class="inv4-card-status" id="inv4StatusRobux"></div>
                     </div>
-                    
-                    <!-- BACKUP CODE CARD - click to copy + icon copy -->
                     <div class="inv4-card inv4-card-backup inv4-card-clickable" id="inv4CardBackup" data-field="backup">
                         <div class="inv4-card-header">
                             <div class="inv4-card-label">🔐 Backup Code</div>
@@ -225,18 +216,7 @@ export function renderApp() {
         </div>
     </section>
 
-    <!-- Template Categories -->
-    <section class="categories-section">
-        <h3><i class="fas fa-folder"></i> Kategori Template</h3>
-        <div class="categories">
-            <button class="category-btn active" data-category="all">Semua</button>
-            <button class="category-btn" data-category="order">Order</button>
-            <button class="category-btn" data-category="problem">Masalah</button>
-            <button class="category-btn" data-category="status">Status</button>
-            <button class="category-btn" data-category="security">Keamanan</button>
-            <button class="category-btn" data-category="other">Lainnya</button>
-        </div>
-    </section>
+    <!-- Template Categories — DIHAPUS, digabung ke templates-section -->
 
     <!-- Templates Section -->
     <section class="templates-section">
@@ -247,7 +227,34 @@ export function renderApp() {
                 <button class="toggle-all-btn" id="toggleAllBtn"><i class="fas fa-eye"></i><span>Tampilkan</span></button>
             </div>
         </div>
+
+        <!-- Filter bar: muncul saat grid dibuka -->
+        <div class="template-filter-bar" id="templateFilterBar" style="display:none;">
+            <div class="tmpl-search-wrap">
+                <i class="fas fa-search tmpl-search-icon"></i>
+                <input
+                    type="text"
+                    id="templateSearchInline"
+                    class="tmpl-search-input"
+                    placeholder="Cari template..."
+                >
+            </div>
+            <div class="tmpl-cat-pills" id="tmplCatPills">
+                <button class="tmpl-pill active" data-cat="all">Semua</button>
+                <button class="tmpl-pill" data-cat="order">Order</button>
+                <button class="tmpl-pill" data-cat="problem">Masalah</button>
+                <button class="tmpl-pill" data-cat="status">Status</button>
+                <button class="tmpl-pill" data-cat="security">Keamanan</button>
+                <button class="tmpl-pill" data-cat="keamanan">Keamanan 2</button>
+                <button class="tmpl-pill" data-cat="other">Lainnya</button>
+            </div>
+        </div>
+
         <div class="templates-grid hidden" id="templatesGrid"></div>
+        <div class="tmpl-empty" id="tmplEmpty" style="display:none;">
+            <i class="fas fa-search"></i>
+            <p>Gak ada template yang cocok.</p>
+        </div>
     </section>
 
     <!-- Reseller Section -->
@@ -364,5 +371,29 @@ export function renderApp() {
     document.getElementById('inv4CopyBackupBtn').addEventListener('click', (e) => {
         e.stopPropagation();
         window.inv4CopySingleField('backup');
+    });
+
+    // ── TEMPLATE FILTER BAR ──────────────────────────────────────────
+
+    // Toggle Tampilkan: munculkan/sembunyikan filter bar sekalian
+    document.getElementById('toggleAllBtn').addEventListener('click', function () {
+        window.toggleAllTemplates();
+        const grid = document.getElementById('templatesGrid');
+        const filterBar = document.getElementById('templateFilterBar');
+        const isNowVisible = !grid.classList.contains('hidden');
+        filterBar.style.display = isNowVisible ? 'flex' : 'none';
+        if (isNowVisible) window.applyTemplateFilter();
+    });
+
+    // Inline search
+    document.getElementById('templateSearchInline').addEventListener('input', () => window.applyTemplateFilter());
+
+    // Inline category pills
+    document.getElementById('tmplCatPills').addEventListener('click', function (e) {
+        const pill = e.target.closest('.tmpl-pill');
+        if (!pill) return;
+        this.querySelectorAll('.tmpl-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        window.applyTemplateFilter();
     });
 }
