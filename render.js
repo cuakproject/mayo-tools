@@ -60,22 +60,22 @@ export function renderApp() {
     <section class="quick-actions-section">
         <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
         <div class="quick-actions">
+            <button class="quick-btn" data-template="wrongpw"><i class="fas fa-key"></i><span>PW Salah</span></button>
+            <button class="quick-btn" data-template="reset"><i class="fas fa-redo"></i><span>Reset PW</span></button>
+            <button class="quick-btn" data-template="regencode"><i class="fas fa-sync"></i><span>Invalid BC</span></button>
+            <button class="quick-btn" data-template="webproblem"><i class="fas fa-globe"></i><span>BC Ngasal</span></button>
+            <button class="quick-btn" data-template="queue"><i class="fas fa-users"></i><span>Acc Only</span></button>
+            <button class="quick-btn" data-template="fix"><i class="fas fa-tools"></i><span>Passkey Aktif</span></button>
+            <button class="quick-btn" data-template="qr"><i class="fas fa-qrcode"></i><span>Hardware Passkey</span></button>
             <button class="quick-btn" data-template="order"><i class="fas fa-shopping-cart"></i><span>Cara Order</span></button>
             <button class="quick-btn" data-template="thanks"><i class="fas fa-heart"></i><span>Masamaa</span></button>
             <button class="quick-btn" data-template="list"><i class="fas fa-bars"></i><span>Klik List</span></button>
             <button class="quick-btn" data-template="premium"><i class="fas fa-crown"></i><span>Order Web</span></button>
-            <button class="quick-btn" data-template="fix"><i class="fas fa-tools"></i><span>Passkey Aktif</span></button>
-            <button class="quick-btn" data-template="qr"><i class="fas fa-qrcode"></i><span>Hardware Passkey</span></button>
-            <button class="quick-btn" data-template="wrongpw"><i class="fas fa-key"></i><span>PW Salah</span></button>
-            <button class="quick-btn" data-template="backup"><i class="fas fa-key"></i><span>Backup Code</span></button>
-            <button class="quick-btn" data-template="reset"><i class="fas fa-redo"></i><span>Reset PW</span></button>
+            <button class="quick-btn" data-template="backup"><i class="fas fa-key"></i><span>Tutor BC Full</span></button>
             <button class="quick-btn" data-template="estimation"><i class="fas fa-exclamation"></i><span>Bikin BC GK</span></button>
-            <button class="quick-btn" data-template="queue"><i class="fas fa-users"></i><span>Acc Only</span></button>
-            <button class="quick-btn" data-template="checklogin"><i class="fas fa-sign-in-alt"></i><span>Cek Login</span></button>
-            <button class="quick-btn" data-template="regencode"><i class="fas fa-sync"></i><span>Invalid BC</span></button>
+            <button class="quick-btn" data-template="checklogin"><i class="fas fa-sign-in-alt"></i><span>Cek Login</span></button>            
             <button class="quick-btn" data-template="checkemail"><i class="fas fa-envelope"></i><span>Cek Email</span></button>
             <button class="quick-btn" data-template="gp"><i class="fas fa-cart-plus"></i><span>Via Gamepass</span></button>
-            <button class="quick-btn" data-template="webproblem"><i class="fas fa-globe"></i><span>BC Ngasal</span></button>
             <button class="quick-btn" data-template="error"><i class="fas fa-exclamation-triangle"></i><span>Ke Logout</span></button>
             <button class="quick-btn" data-template="2step"><i class="fas fa-shield-alt"></i><span>2-Step Error</span></button>
             <button class="quick-btn" data-template="prem"><i class="fas fa-check-circle"></i><span>Prem Explain</span></button>
