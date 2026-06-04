@@ -75,7 +75,7 @@ export function renderApp() {
             <button class="quick-btn" data-template="regencode"><i class="fas fa-sync"></i><span>Invalid BC</span></button>
             <button class="quick-btn" data-template="checkemail"><i class="fas fa-envelope"></i><span>Cek Email</span></button>
             <button class="quick-btn" data-template="gp"><i class="fas fa-cart-plus"></i><span>Via Gamepass</span></button>
-            <button class="quick-btn" data-template="webproblem"><i class="fas fa-globe"></i><span>Problem Web</span></button>
+            <button class="quick-btn" data-template="webproblem"><i class="fas fa-globe"></i><span>BC Ngasal</span></button>
             <button class="quick-btn" data-template="error"><i class="fas fa-exclamation-triangle"></i><span>Ke Logout</span></button>
             <button class="quick-btn" data-template="2step"><i class="fas fa-shield-alt"></i><span>2-Step Error</span></button>
             <button class="quick-btn" data-template="prem"><i class="fas fa-check-circle"></i><span>Prem Explain</span></button>
