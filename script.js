@@ -63,6 +63,8 @@ function loadTemplates() {
         card.className = 'template-card';
         card.setAttribute('data-id', t.id);
         card.setAttribute('data-category', t.category);
+        card.setAttribute('data-name', t.name.toLowerCase());
+        card.setAttribute('data-preview', t.content.slice(0, 100).toLowerCase());
         card.innerHTML = `
             <div class="tc-accent-bar"></div>
             <div class="tc-body">
@@ -71,8 +73,8 @@ function loadTemplates() {
                     <span class="tc-used-badge">${used}×</span>
                 </div>
                 <h4 class="tc-name">${t.name}</h4>
-                <div class="tc-preview ${templatesHidden ? '' : 'hidden'}">${t.content.trim().substring(0, 120)}${t.content.length > 120 ? '...' : ''}</div>
-                <div class="tc-content ${templatesHidden ? 'hidden' : ''}">${t.content}</div>
+                <div class="tc-preview">${t.content.trim().substring(0, 120)}${t.content.length > 120 ? '...' : ''}</div>
+                <div class="tc-content hidden">${t.content}</div>
             </div>
             <div class="tc-footer">
                 <span class="tc-tap-hint"><i class="fas fa-hand-pointer"></i> Tap to copy</span>
@@ -101,10 +103,10 @@ function addTemplateEventListeners() {
 function handleQuickAction(type) {
     const map = {
         'order':1, 'backup':4, 'list':99, 'error':7, '2step':23,
-        'qr':8, 'queue':20, 'prem':10, 'thanks':14, 'premium':15,
+        'qr':8, 'queue':20, 'prem':10, 'thanks':14, 'weborder':15,
         'fix':25, 'wrongpw':6, 'estimation':9, 'checklogin':2,
         'checkemail':3, 'reset':11, 'webproblem':21, 'regencode':22,
-        'gp':16, 'gkmsk':5
+        'gp':16, 'gkmsk':5, 'gabisa':52, 'cs':29
     };
     if (map[type]) copyTemplate(map[type]);
 }
@@ -145,34 +147,55 @@ function fallbackCopy(text, id, name) {
     document.body.removeChild(ta);
 }
 
-// ==================== SEARCH ====================
+// ==================== SEARCH (navbar) ====================
 function initializeSearch() {
     document.getElementById('searchInput').addEventListener('input', function () {
         const q = this.value.toLowerCase().trim();
         if (q && templatesHidden) showTemplatesGrid();
-        document.querySelectorAll('.template-card').forEach(card => {
-            if (!q) { card.style.display = (activeCategory === 'all' || card.getAttribute('data-category') === activeCategory) ? '' : 'none'; return; }
-            const matchCat = activeCategory === 'all' || card.getAttribute('data-category') === activeCategory;
-            const id = card.getAttribute('data-id');
-            const tpl = templatesData.find(t => t.id == id);
-            const nameText = card.querySelector('.tc-name').textContent.toLowerCase();
-            const contentText = tpl ? tpl.content.toLowerCase() : '';
-            card.style.display = ((nameText.includes(q) || contentText.includes(q)) && matchCat) ? '' : 'none';
-        });
+        // sync inline search juga
+        const inlineInput = document.getElementById('templateSearchInline');
+        if (inlineInput) inlineInput.value = q;
+        applyTemplateFilter(q);
     });
 }
 
+// ==================== INLINE FILTER ====================
+function applyTemplateFilter(forceQ) {
+    const q = forceQ !== undefined
+        ? forceQ
+        : (document.getElementById('templateSearchInline')?.value.toLowerCase().trim() || '');
+    const activePill = document.querySelector('#tmplCatPills .tmpl-pill.active');
+    const cat = activePill ? activePill.dataset.cat : 'all';
+
+    const cards = document.querySelectorAll('#templatesGrid .template-card');
+    let visible = 0;
+
+    cards.forEach(card => {
+        const name    = card.getAttribute('data-name') || '';
+        const preview = card.getAttribute('data-preview') || '';
+        const cardCat = card.getAttribute('data-category') || '';
+
+        const matchCat = cat === 'all' || cardCat === cat;
+        const matchQ   = q === '' || name.includes(q) || preview.includes(q);
+        const show     = matchCat && matchQ;
+
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+    });
+
+    const emptyEl = document.getElementById('tmplEmpty');
+    if (emptyEl) emptyEl.style.display = visible === 0 ? 'block' : 'none';
+}
+window.applyTemplateFilter = applyTemplateFilter;
+
+// ==================== CATEGORY FILTER (legacy .category-btn support removed) ====================
 function filterTemplatesByCategory(cat) {
     activeCategory = cat;
-    const q = document.getElementById('searchInput').value.toLowerCase().trim();
-    document.querySelectorAll('.template-card').forEach(card => {
-        const matchCat = cat === 'all' || card.getAttribute('data-category') === cat;
-        const id = card.getAttribute('data-id');
-        const tpl = templatesData.find(t => t.id == id);
-        const nameText = card.querySelector('.tc-name').textContent.toLowerCase();
-        const contentText = tpl ? tpl.content.toLowerCase() : '';
-        card.style.display = (matchCat && (!q || nameText.includes(q) || contentText.includes(q))) ? '' : 'none';
+    // sync pill
+    document.querySelectorAll('#tmplCatPills .tmpl-pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.cat === cat);
     });
+    applyTemplateFilter();
 }
 
 // ==================== THEME ====================
@@ -215,6 +238,7 @@ function hideTemplatesGrid() {
 }
 
 function toggleAllTemplates() { templatesHidden ? showTemplatesGrid() : hideTemplatesGrid(); }
+window.toggleAllTemplates = toggleAllTemplates;
 
 // ==================== STATS ====================
 function updateStats() {
@@ -582,28 +606,21 @@ function inv4TriggerLookup(username) {
 
 function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
     console.log('🖼️ Avatar URL:', avatarUrl, 'Premium:', isPremium, 'ID:', userId);
-    
     ['inv4AvatarEmpty','inv4AvatarLoading','inv4AvatarErr','inv4UserX'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
     });
     ['inv4AvatarFound','inv4UserCheck'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'flex';
     });
-
     const img = document.getElementById('inv4AvatarImg');
     if (img) {
         img.onerror = null; img.onload = null;
         img.style.display = 'block';
-        
         if (avatarUrl && userId) {
-            // Pake proxy backend (CEPET)
             img.src = `${ROBLOX_PROXY_URL}/avatar/${userId}`;
-            
             img.onerror = function() {
-                // Proxy gagal, coba direct
                 if (avatarUrl) {
                     img.onerror = function() {
-                        // Semua gagal → icon default
                         img.style.display = 'none';
                         document.getElementById('inv4AvatarFound').style.display = 'none';
                         document.getElementById('inv4AvatarEmpty').style.display = 'flex';
@@ -616,20 +633,13 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
                 }
             };
         } else {
-            // Ga ada avatar → icon default langsung
             img.style.display = 'none';
             document.getElementById('inv4AvatarFound').style.display = 'none';
             document.getElementById('inv4AvatarEmpty').style.display = 'flex';
         }
     }
-
-    // Premium badge
     const prem = document.getElementById('inv4AvatarPrem');
-    if (prem) {
-        prem.src = 'foto/prem.png';
-        prem.style.display = isPremium ? 'block' : 'none';
-    }
-
+    if (prem) { prem.src = 'foto/prem.png'; prem.style.display = isPremium ? 'block' : 'none'; }
     const card = document.getElementById('inv4CardUser');
     if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
     inv4SetStatus('inv4StatusUser', 'ok', '✓');
@@ -686,7 +696,6 @@ function initializeResellerBot() { renderResellerUI(); }
 function renderResellerUI() {
     const container = document.querySelector('.reseller-container'); if (!container) return;
     container.innerHTML = `<div class="rs-tabs"><button class="rs-tab ${rsState.command==='proses'?'active':''}" data-cmd="proses"><i class="fas fa-play-circle"></i> /proses</button><button class="rs-tab ${rsState.command==='addsaldo'?'active':''}" data-cmd="addsaldo"><i class="fas fa-plus-circle"></i> /addsaldo</button><button class="rs-tab ${rsState.command==='kurangsaldo'?'active':''}" data-cmd="kurangsaldo"><i class="fas fa-minus-circle"></i> /kurangsaldo</button></div><div class="rs-section ${rsState.command!=='proses'?'hidden':''}"><div class="rs-section-label"><i class="fas fa-coins"></i> Pilih Nominal</div><div class="rs-nominal-wrap">${nominalData.map(n=>`<button class="rs-nominal-chip ${rsState.nominal===n.amount?'selected':''}" data-amount="${n.amount}"><span class="rs-chip-amount">${n.amount}</span><span class="rs-chip-price">${n.price}</span></button>`).join('')}</div></div><div class="rs-section"><div class="rs-section-label"><i class="fas fa-users"></i> Pilih Reseller</div><div class="rs-search-wrap"><i class="fas fa-search rs-search-icon"></i><input type="text" class="rs-search-input" id="rsSearchInput" placeholder="Cari nama..."><button class="rs-clear-search" id="rsClearSearch" style="display:none"><i class="fas fa-times"></i></button></div><div class="rs-reseller-grid" id="rsResellerGrid">${resellerData.map((r,i)=>`<button class="rs-reseller-card ${rsState.reseller===r.username?'selected':''}" data-username="${r.username}" data-index="${i}"><div class="rs-avatar" style="background:${r.color}">${[...r.displayName.trim()][0]||'?'}</div><div class="rs-rinfo"><div class="rs-rname">${r.displayName}</div><div class="rs-rusername">${r.username}</div></div><i class="fas fa-check rs-check-icon"></i></button>`).join('')}</div></div><div class="rs-result-bar ${(rsState.reseller&&(rsState.command!=='proses'||rsState.nominal))?'active':''}" id="rsResultBar"><div class="rs-result-preview" id="rsResultPreview">—</div><button class="rs-copy-btn" id="rsCopyBtn"><i class="fas fa-copy"></i> Copy</button></div>`;
-    // Event listeners (abbreviated)
     container.querySelectorAll('.rs-tab').forEach(t=>t.addEventListener('click',function(){rsState.command=this.dataset.cmd;rsState.nominal=null;rsState.reseller=null;renderResellerUI();}));
     container.querySelectorAll('.rs-nominal-chip').forEach(c=>c.addEventListener('click',function(){rsState.nominal=this.dataset.amount;container.querySelectorAll('.rs-nominal-chip').forEach(x=>x.classList.remove('selected'));this.classList.add('selected');updateRsResult();}));
     container.querySelectorAll('.rs-reseller-card').forEach(c=>c.addEventListener('click',function(){rsState.reseller=this.dataset.username;container.querySelectorAll('.rs-reseller-card').forEach(x=>x.classList.remove('selected'));this.classList.add('selected');updateRsResult();}));
@@ -715,11 +724,25 @@ window.inv4FieldChanged=inv4FieldChanged;window.inv4FormatRobuxField=inv4FormatR
 window.inv4ToggleBackupEdit=inv4ToggleBackupEdit;window.inv4Copy=inv4Copy;window.inv4CopySingleField=inv4CopySingleField;
 
 // ==================== INIT ====================
-document.addEventListener('DOMContentLoaded',function(){
-    renderApp();loadTemplates();initializeTheme();initializeSearch();initializeResellerBot();updateStats();initializeScrollButtons();initializeBackupFormatter();warmUpWorker();
-    document.getElementById('themeToggle').addEventListener('click',toggleTheme);
-    document.getElementById('showStats').addEventListener('click',showStats);
-    document.getElementById('toggleAllBtn').addEventListener('click',toggleAllTemplates);
-    document.querySelectorAll('.quick-btn').forEach(b=>b.addEventListener('click',function(){handleQuickAction(this.getAttribute('data-template'));}));
-    document.querySelectorAll('.category-btn').forEach(b=>b.addEventListener('click',function(){document.querySelectorAll('.category-btn').forEach(x=>x.classList.remove('active'));this.classList.add('active');filterTemplatesByCategory(this.getAttribute('data-category'));}));
+document.addEventListener('DOMContentLoaded', function () {
+    renderApp();
+    loadTemplates();
+    initializeTheme();
+    initializeSearch();
+    initializeResellerBot();
+    updateStats();
+    initializeScrollButtons();
+    initializeBackupFormatter();
+    warmUpWorker();
+
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    document.getElementById('showStats').addEventListener('click', showStats);
+
+    // toggleAllBtn sekarang dihandle di render.js via event listener
+    // tapi perlu fallback kalau dipanggil dari luar
+    // => sudah di-expose window.toggleAllTemplates
+
+    document.querySelectorAll('.quick-btn').forEach(b => b.addEventListener('click', function () {
+        handleQuickAction(this.getAttribute('data-template'));
+    }));
 });
