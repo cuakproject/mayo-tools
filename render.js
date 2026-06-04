@@ -64,13 +64,13 @@ export function renderApp() {
             <button class="quick-btn" data-template="thanks"><i class="fas fa-heart"></i><span>Masamaa</span></button>
             <button class="quick-btn" data-template="list"><i class="fas fa-bars"></i><span>Klik List</span></button>
             <button class="quick-btn" data-template="premium"><i class="fas fa-crown"></i><span>Order Web</span></button>
-            <button class="quick-btn" data-template="fix"><i class="fas fa-tools"></i><span>Perbaikan Tele</span></button>
-            <button class="quick-btn" data-template="qr"><i class="fas fa-qrcode"></i><span>Salah Klik</span></button>
+            <button class="quick-btn" data-template="fix"><i class="fas fa-tools"></i><span>Passkey Aktif</span></button>
+            <button class="quick-btn" data-template="qr"><i class="fas fa-qrcode"></i><span>Hardware Passkey</span></button>
             <button class="quick-btn" data-template="wrongpw"><i class="fas fa-key"></i><span>PW Salah</span></button>
             <button class="quick-btn" data-template="backup"><i class="fas fa-key"></i><span>Backup Code</span></button>
             <button class="quick-btn" data-template="reset"><i class="fas fa-redo"></i><span>Reset PW</span></button>
             <button class="quick-btn" data-template="estimation"><i class="fas fa-exclamation"></i><span>Bikin BC GK</span></button>
-            <button class="quick-btn" data-template="queue"><i class="fas fa-users"></i><span>Passkey Aktif</span></button>
+            <button class="quick-btn" data-template="queue"><i class="fas fa-users"></i><span>Tes</span></button>
             <button class="quick-btn" data-template="checklogin"><i class="fas fa-sign-in-alt"></i><span>Cek Login</span></button>
             <button class="quick-btn" data-template="regencode"><i class="fas fa-sync"></i><span>Invalid BC</span></button>
             <button class="quick-btn" data-template="checkemail"><i class="fas fa-envelope"></i><span>Cek Email</span></button>
