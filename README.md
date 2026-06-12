@@ -2,7 +2,7 @@
 
 Dashboard internal untuk manajemen order, invoice, template, dan tools reseller Roblox top-up.
 
-**Live:** [mayo-tools.vercel.app](https://mayo-tools.vercel.app)
+**Live:** [mayo-tools.vercel.app](https://mayopass.vercel.app)
 
 ---
 
