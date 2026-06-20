@@ -599,12 +599,12 @@ function inv4TriggerLookup(username) {
             if (cancelled) return;
             console.log('📦 Lookup response:', data);
             if (!data.success || !data.found) { inv4ShowAvatarErr('"' + clean + '" tidak ditemukan'); return; }
-            inv4ShowAvatarFoundSimple(data.avatarUrl, data.isPremium, data.id, data.isXboxLinked, data.xboxGamertag);
+            inv4ShowAvatarFoundSimple(data.avatarUrl, data.isPremium, data.id);
         } catch (e) { if (!cancelled) { console.error('❌ Lookup error:', e); inv4ShowAvatarErr('Gagal koneksi'); } }
     }, 200);
 }
 
-function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId, isXboxLinked, xboxGamertag) {
+function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId) {
     console.log('🖼️ Avatar URL:', avatarUrl, 'Premium:', isPremium, 'ID:', userId);
     ['inv4AvatarEmpty','inv4AvatarLoading','inv4AvatarErr','inv4UserX'].forEach(id => {
         const el = document.getElementById(id); if (el) el.style.display = 'none';
@@ -640,10 +640,6 @@ function inv4ShowAvatarFoundSimple(avatarUrl, isPremium, userId, isXboxLinked, x
     }
     const prem = document.getElementById('inv4AvatarPrem');
     if (prem) { prem.src = 'foto/prem.png'; prem.style.display = isPremium ? 'block' : 'none'; }
-
-    const xbox = document.getElementById('inv4AvatarXbox');
-    if (xbox) { xbox.style.display = isXboxLinked ? 'block' : 'none'; if (xboxGamertag) xbox.title = xboxGamertag; }
-    
     const card = document.getElementById('inv4CardUser');
     if (card) { card.classList.add('state-ok'); card.classList.remove('state-err'); }
     inv4SetStatus('inv4StatusUser', 'ok', '✓');
