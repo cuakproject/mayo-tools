@@ -142,7 +142,7 @@ export function renderApp() {
                             <div class="inv4-avatar-slot">
                                 <div class="inv4-av-state" id="inv4AvatarEmpty"><i class="fas fa-user-circle inv4-av-empty-icon"></i></div>
                                 <div class="inv4-av-state" id="inv4AvatarLoading" style="display:none;"><div class="inv4-skel-circle"></div><div class="inv4-av-spinner"></div></div>
-                                <div class="inv4-av-state" id="inv4AvatarFound" style="display:none;"><img id="inv4AvatarImg" src="" alt="" class="inv4-av-img"><img id="inv4AvatarPrem" src="foto/prem.png" class="inv4-prem-badge" style="display:none;"></div>
+                                <div class="inv4-av-state" id="inv4AvatarFound" style="display:none;"><img id="inv4AvatarImg" src="" alt="" class="inv4-av-img"><img id="inv4AvatarPrem" src="foto/prem.png" class="inv4-prem-badge" style="display:none;"><img id="inv4AvatarXbox" src="foto/xbox.png" class="inv4-prem-badge" style="display:none;" title="Xbox Connected"></div>
                                 <div class="inv4-av-state" id="inv4AvatarErr" style="display:none;"><i class="fas fa-user-circle inv4-av-err-icon"></i></div>
                             </div>
                             <input class="inv4-card-input inv4-user-input" id="inv4User" placeholder="username Roblox">
