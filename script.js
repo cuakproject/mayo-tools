@@ -599,7 +599,7 @@ function inv4TriggerLookup(username) {
             if (cancelled) return;
             console.log('📦 Lookup response:', data);
             if (!data.success || !data.found) { inv4ShowAvatarErr('"' + clean + '" tidak ditemukan'); return; }
-            iinv4ShowAvatarFoundSimple(data.avatarUrl, data.isPremium, data.id, data.isXboxLinked, data.xboxGamertag);
+            inv4ShowAvatarFoundSimple(data.avatarUrl, data.isPremium, data.id, data.isXboxLinked, data.xboxGamertag);
         } catch (e) { if (!cancelled) { console.error('❌ Lookup error:', e); inv4ShowAvatarErr('Gagal koneksi'); } }
     }, 200);
 }
